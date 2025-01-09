@@ -25,36 +25,30 @@ const tasks = [
     for (const task of tasks) {
     
     if (task.completed === true) {
-      list.innerHTML += `<li class="tachado"><input type="checkbox" checked /> ${task.name}</li>`; 
+      list.innerHTML += `<li class="tachado"><input type="checkbox" id="${task.id}" checked /> ${task.name}</li>`; 
     } else {
-        list.innerHTML += `<li><input type="checkbox"/> ${task.name}</li>`;  
+        list.innerHTML += `<li><input type="checkbox" id="${task.id}"/> ${task.name}</li>`;  
     }
   }
 };
 
-//tenemos que escuchar el evento en la ul
-function handleCheckboxCompleted (){
 
-   
-}
+// function handleClickAdd (ev) {
+//     ev.preventDefault ();
+//     const valueInputAdd = formAdd.value;
+//     const index = tasks.indexOf(valueInputAdd);
+//     if(index === -1) {
+//         tasks.push(valueInputAdd);
+//         list.innerHTML += `<li><input type="checkbox"/> ${valueInputAdd}</li>`;
+//     } else {
+//         span.innerHTML = "La tarea ya existe.";
+//     };
 
-
-
-function handleClickAdd (ev) {
-    ev.preventDefault ();
-    const valueInputAdd = formAdd.value;
-    const index = tasks.indexOf(valueInputAdd);
-    if(index === -1) {
-        tasks.push(valueInputAdd);
-    } else {
-        span.innerHTML = "La tarea ya existe.";
-    };
-
-    renderTask ();
-  };
+//     renderTask ();
+//   };
 
   renderTask ();
-  btnAdd.addEventListener("click", handleClickAdd);
+  // btnAdd.addEventListener("click", handleClickAdd);
 
 
 
@@ -64,11 +58,15 @@ function handleClickAdd (ev) {
 
   const handleClickList = (event) => {
     const taskId = parseInt(event.target.id); // Obtengo el id del checkbox clickado por la usuaria
-    if (!taskId) return; // Si no ha pulsado en el checkbox, no queremos hacer nada y salimos de la función
-  
-    // Busca la tarea que tenga el id `taskId` en el array `tasks`
-    // Una vez que has obtenido la tarea, actualiza la propiedad `completed`
-    // Pinta de nuevo las tareas en el html
+    if (!taskId) return; 
+    const indexId = tasks.findIndex ((task) => task.id === taskId);
+    if (tasks [indexId].completed === true) {
+      tasks [indexId].completed = false;
+    } else {
+      tasks [indexId].completed = true;
+    }
+    renderTask();
+    
   };
   
   list.addEventListener("click", handleClickList);
