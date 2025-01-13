@@ -6,20 +6,13 @@ const taskFilter = document.querySelector(".js-text-task-filter");
 const btnFilter = document.querySelector(".js-btn-filter");
 const list = document.querySelector(".js-list");
 const span = document.querySelector(".js-span");
+const p = document.querySelector(".js-p");
 
 
 //Tenemos que crear una funcion que modifique el array para cambiar las tareas a completas o no. Un splice
-const tasks = [
-    { name: "Recoger setas en el campo", completed: true, id: 1 },
-    { name: "Comprar pilas", completed: true, id: 2 },
-    { name: "Poner una lavadora de blancos", completed: true, id: 3 },
-    { name: "Aprender cómo se realizan las peticiones al servidor en JavaScript",
-      completed: false,
-      id: 4,
-    },
-  ];
+let tasks = [];
 
-  function renderTask (array) {
+function renderTask (array) {
      //llamar a la funcion con parametro ajustado
 
     list.innerHTML = "";
@@ -33,11 +26,11 @@ const tasks = [
   }
 };
 
-  renderTask (tasks);
+renderTask (tasks);
  
 
   //Ejercicio  2.12 
-  const handleClickList = (event) => {
+const handleClickList = (event) => {
     const taskId = parseInt(event.target.id); // Obtengo el id del checkbox clickado por la usuaria
     if (!taskId) return; 
     const indexId = tasks.findIndex ((task) => task.id === taskId);
@@ -50,7 +43,7 @@ const tasks = [
     
   };
   
-  list.addEventListener("click", handleClickList);
+list.addEventListener("click", handleClickList);
 
 
 //Filtrar tareas. crear evento para boton, crear la funcion del evento,...
@@ -59,18 +52,33 @@ const tasks = [
 const handleClickFilter = (ev) => {
   ev.preventDefault();
   const InputTaskFilter = taskFilter.value.toLowerCase();
-  const taskFilterSearch = tasks.filter((oneTask)=> oneTask.name.includes(InputTaskFilter));
+  const taskFilterSearch = tasks.filter((oneTask)=> oneTask.name.toLowerCase().includes(InputTaskFilter));
   
  
   renderTask(taskFilterSearch);
       
-
-  
-}
+};
 
 
 btnFilter.addEventListener("click", handleClickFilter);
   
+const GITHUB_USER = "<tu_usuario_de_github_aqui>";
+const SERVER_URL = `https://dev.adalab.es/api/todo/${GITHUB_USER}`;
+
+fetch("https://dev.adalab.es/api/todo")
+.then((resp) => resp.json())
+.then((infoTask) => {
+  tasks = infoTask.results;
+  
+  for (const oneTask of tasks) {
+    list.innerHTML += `<li>${oneTask.name}</li>`;
+  }
+  p.innerHTML = `Tienes ${tasks.length} tareas: ${}  completadas y  por realizar.`
+  renderTask(tasks)
+});
+
+ 
+
 // function handleClickAdd (ev) {
 //     ev.preventDefault ();
 //     const valueInputAdd = formAdd.value;
