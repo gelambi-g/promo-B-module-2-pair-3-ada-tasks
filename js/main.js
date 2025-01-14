@@ -40,11 +40,11 @@ const handleClickList = (event) => {
       tasks [indexId].completed = true;
     }
     renderTask(tasks);
+    renderCompleted();
     
   };
   
 list.addEventListener("click", handleClickList);
-
 
 //Filtrar tareas. crear evento para boton, crear la funcion del evento,...
 //si la tarea buscada existe que se pinte y si no existe, que salta mensaje la tarea no existe.
@@ -65,6 +65,14 @@ btnFilter.addEventListener("click", handleClickFilter);
 const GITHUB_USER = "<tu_usuario_de_github_aqui>";
 const SERVER_URL = `https://dev.adalab.es/api/todo/${GITHUB_USER}`;
 
+function renderCompleted () {
+  const completed = tasks.filter ((taskCompleted) => taskCompleted.completed);
+  const completedNot = !completed 
+  const notCompleted = tasks.filter ((taskNOTCompleted) => taskNOTCompleted.completed === completedNot);
+  p.innerHTML = `Tienes ${tasks.length} tareas: ${completed.length}  completadas y ${notCompleted.length} por realizar.`
+  
+}
+
 fetch("https://dev.adalab.es/api/todo")
 .then((resp) => resp.json())
 .then((infoTask) => {
@@ -72,24 +80,28 @@ fetch("https://dev.adalab.es/api/todo")
   
   for (const oneTask of tasks) {
     list.innerHTML += `<li>${oneTask.name}</li>`;
-  }
-  p.innerHTML = `Tienes ${tasks.length} tareas: ${}  completadas y  por realizar.`
-  renderTask(tasks)
+  };
+  renderTask(tasks);
+  renderCompleted();
 });
 
- 
+function handleClickAdd (ev) {
+    ev.preventDefault ();
+    const valueInputAdd = formAdd.value;
+    const newTask = {
+      name: `${valueInputAdd}`,
+      completed: false,
+    };
 
-// function handleClickAdd (ev) {
-//     ev.preventDefault ();
-//     const valueInputAdd = formAdd.value;
-//     const index = tasks.indexOf(valueInputAdd);
-//     if(index === -1) {
-//         tasks.push(valueInputAdd);
-//         list.innerHTML += `<li><input type="checkbox"/> ${valueInputAdd}</li>`;
-//     } else {
-//         span.innerHTML = "La tarea ya existe.";
-//     };
 
-//     renderTask ();
-//   };
- // btnAdd.addEventListener("click", handleClickAdd);
+    //const index = tasks.indexOf(valueInputAdd);
+    // if(index === -1) {
+    //     tasks.push(valueInputAdd);
+    //     list.innerHTML += `<li><input type="checkbox"/> ${valueInputAdd}</li>`;
+    // } else {
+    //     span.innerHTML = "La tarea ya existe.";
+    // };
+
+    renderTask ();
+  };
+ btnAdd.addEventListener("click", handleClickAdd);
